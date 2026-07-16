@@ -2,6 +2,7 @@
 name: explore-docs
 description: Documentation research agent. Use when you need up-to-date, authoritative docs for any library, framework, SDK, API, or CLI tool. Resolves library IDs via Context7 and fetches current documentation — never relies on stale training data. Ideal for: API signatures, configuration options, migration guides, version-specific behavior, setup instructions.
 tools: mcp__claude_ai_Context7__resolve-library-id, mcp__claude_ai_Context7__query-docs, WebFetch, WebSearch
+model: haiku
 ---
 
 <system>
