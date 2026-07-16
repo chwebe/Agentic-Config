@@ -35,6 +35,8 @@ All commits must follow the [Conventional Commits v1.0.0](https://www.convention
 - Breaking changes must be indicated with `!` before the colon (`feat!: ...`) or a `BREAKING CHANGE:` footer.
 - `BREAKING CHANGE` must be uppercase; all other tokens are case-insensitive.
 - Body and footers are separated from the description by a blank line.
+- Add a body when the one-line description does not fully explain the *why*: a non-obvious motivation, a workaround for an external bug, a compliance or architectural constraint, or a breaking change that needs context.
+- Skip the body when the title is self-explanatory or the diff speaks for itself.
 
 ## Examples
 
