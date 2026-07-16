@@ -17,14 +17,30 @@ shared/
 ├── rules/
 │   └── *.md               # Rule files imported via @rules/<name>.md in CLAUDE.md
 └── skills/
-    └── <name>/            # Skill definitions (source of truth, symlinked into ~/.claude/)
+    └── <name>/
+        └── SKILL.md       # Skill definition, symlinked into ~/.claude/skills/ and ~/.claude/commands/
 ```
 
 `shared/claude/CLAUDE.md` is the active global config. It uses `@rules/<name>.md` imports to pull in rule files from `shared/rules/`. New rules go in `shared/rules/` and are wired in via an `@` import in `shared/claude/CLAUDE.md`.
+
+## Setup
+
+Run `setup.sh` once after cloning (or after adding new files) to create all symlinks:
+
+```bash
+bash ~/.config/Agentic-Config/setup.sh
+```
+
+It symlinks each file individually:
+- `shared/agents/*.md` → `~/.claude/agents/`
+- `shared/rules/*.md` → `~/.claude/rules/`
+- `shared/skills/<name>/` → `~/.claude/skills/<name>`
+- `shared/skills/<name>/SKILL.md` → `~/.claude/commands/<name>.md`
+
+The script is idempotent — safe to re-run after adding new agents, rules, or skills.
 
 ## Conventions
 
 - Agent files (`shared/agents/*.md`) follow the Claude Code agent frontmatter schema: `name`, `description`, `tools`.
 - Rule files are plain markdown — no frontmatter needed.
-- Skills must be authored in `~/.agents/skills/<name>/SKILL.md` and symlinked into `~/.claude/` — never written directly into `~/.claude/commands/`.
-- Shell logic for skills lives in `~/.agents/skills/<name>/scripts/<name>.sh`; the SKILL.md file only calls that script.
+- Skills live in `shared/skills/<name>/SKILL.md`. Shell logic goes in `shared/skills/<name>/scripts/<name>.sh`; SKILL.md only calls that script.
