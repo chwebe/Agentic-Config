@@ -11,17 +11,23 @@ This repo is a versioned store of shared Claude Code configuration — agents, r
 ```
 shared/
 ├── claude/
-│   └── CLAUDE.md          # Global CLAUDE.md, symlinked to ~/.claude/CLAUDE.md
+│   └── CLAUDE.md              # Global CLAUDE.md, symlinked to ~/.claude/CLAUDE.md
 ├── agents/
-│   └── *.md               # Custom agent definitions loaded by Claude Code
+│   ├── *.md                   # Custom agent definitions loaded by Claude Code
+│   └── <group>/               # Subdirectory for related agents (README.md excluded)
+│       └── *.md
 ├── rules/
-│   └── *.md               # Rule files imported via @rules/<name>.md in CLAUDE.md
+│   ├── *.md                   # Rule files imported via @rules/<name>.md in CLAUDE.md
+│   └── <group>/               # Subdirectory for related rules
+│       └── *.md
 └── skills/
     └── <name>/
-        └── SKILL.md       # Skill definition, symlinked into ~/.claude/skills/ and ~/.claude/commands/
+        └── SKILL.md           # Skill definition, symlinked into ~/.claude/skills/ and ~/.claude/commands/
 ```
 
 `shared/claude/CLAUDE.md` is the active global config. It uses `@rules/<name>.md` imports to pull in rule files from `shared/rules/`. New rules go in `shared/rules/` and are wired in via an `@` import in `shared/claude/CLAUDE.md`.
+
+Agents and rules support one level of subdirectories for organization. Files are always linked flat into `~/.claude/agents/` and `~/.claude/rules/` — subdirectory names are not preserved in the destination.
 
 ## Setup
 
@@ -32,15 +38,15 @@ bash ~/.config/Agentic-Config/setup.sh
 ```
 
 It symlinks each file individually:
-- `shared/agents/*.md` → `~/.claude/agents/`
-- `shared/rules/*.md` → `~/.claude/rules/`
+- `shared/agents/*.md` and `shared/agents/*/*.md` → `~/.claude/agents/`
+- `shared/rules/*.md` and `shared/rules/*/*.md` → `~/.claude/rules/`
 - `shared/skills/<name>/` → `~/.claude/skills/<name>`
 - `shared/skills/<name>/SKILL.md` → `~/.claude/commands/<name>.md`
 
-The script is idempotent — safe to re-run after adding new agents, rules, or skills.
+The script is idempotent — safe to re-run after adding new files. It logs `[added]`, `[updated]`, or `[skip]` for each entry, and `[removed]` when a stale symlink pointing into `shared/` is cleaned up.
 
 ## Conventions
 
-- Agent files (`shared/agents/*.md`) follow the Claude Code agent frontmatter schema: `name`, `description`, `tools`.
+- Agent files follow the Claude Code agent frontmatter schema: `name`, `description`, `tools`. `README.md` inside agent subdirectories is ignored by `setup.sh`.
 - Rule files are plain markdown — no frontmatter needed.
 - Skills live in `shared/skills/<name>/SKILL.md`. Shell logic goes in `shared/skills/<name>/scripts/<name>.sh`; SKILL.md only calls that script.
