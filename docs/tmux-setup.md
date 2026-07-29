@@ -13,6 +13,7 @@ A terminal multiplexer environment optimized for development and remote work wit
 |--------|---------|-----------|
 | **tmux-resurrect** | Save/restore tmux sessions | `Ctrl-a Ctrl-s` (save), `Ctrl-a Ctrl-r` (restore) |
 | **tmux-continuum** | Auto-saves sessions every 15 minutes; restores on startup | Automatic |
+| **dracula/tmux** | Dracula color theme with powerline status bar (cpu, ram, time) | N/A |
 | **tpm** | Tmux Plugin Manager (required for above plugins) | N/A |
 
 ### Window & Pane Configuration
@@ -109,7 +110,7 @@ tmux attach-session -t <session-name>
 
 ## Configuration Files
 
-- **`~/.tmux.conf.local`** → Your tmux configuration with keybindings and plugins
+- **`~/.tmux.conf`** → Your tmux configuration with keybindings and plugins
 - **`~/.tmux/plugins/`** → Installed plugins (tpm, resurrect, continuum)
 
 ## Useful Commands
@@ -150,9 +151,9 @@ tmux source ~/.tmux.conf
 - Verify `set -g @continuum-save-interval '15'` is set
 
 **Keybindings not working?**
-- Verify `~/.tmux.conf.local` is sourced
+- Verify `~/.tmux.conf` is sourced
 - Reload config: `Ctrl-a :` then `source ~/.tmux.conf`
 
 **Want to customize further?**
-- Edit `~/.tmux.conf.local` directly
+- Edit `~/.tmux.conf` directly
 - Reload with `tmux source ~/.tmux.conf`

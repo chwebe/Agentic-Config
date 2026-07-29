@@ -124,15 +124,20 @@ install_tmux_plugins() {
         git clone https://github.com/tmux-plugins/tmux-continuum ~/.tmux/plugins/tmux-continuum
     fi
 
+    if [ ! -d ~/.tmux/plugins/tmux ]; then
+        echo "  Installing Dracula theme..."
+        git clone https://github.com/dracula/tmux ~/.tmux/plugins/tmux
+    fi
+
     echo "Plugins installed successfully."
 }
 
-create_tmux_local_config() {
-    if [ -f ~/.tmux.conf.local ]; then
+create_tmux_config() {
+    if [ -f ~/.tmux.conf ]; then
         return 0
     fi
 
-    cat > ~/.tmux.conf.local << 'EOF'
+    cat > ~/.tmux.conf << 'EOF'
 # Renumber windows starting from 1 (instead of 0)
 set -g base-index 1
 set -g pane-base-index 1
@@ -163,15 +168,22 @@ set -g mouse on
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'dracula/tmux'
 
 # Continuum options
 set -g @continuum-restore 'on'
 set -g @continuum-save-interval '15'
 
+# Dracula theme options
+set -g @dracula-show-powerline true
+set -g @dracula-show-flags true
+set -g @dracula-show-left-icon session
+set -g @dracula-plugins "cpu-usage ram-usage time"
+
 # Run TPM
 run '~/.tmux/plugins/tpm/tpm'
 EOF
-    echo "Created ~/.tmux.conf.local with plugin configuration"
+    echo "Created ~/.tmux.conf with plugin configuration"
 }
 
 main() {
@@ -182,7 +194,7 @@ main() {
         echo "tmux installed successfully: $(tmux -V)"
     fi
 
-    create_tmux_local_config
+    create_tmux_config
     install_tmux_plugins
 }
 
