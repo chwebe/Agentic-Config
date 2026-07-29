@@ -5,6 +5,7 @@
 
 @rules/language.md
 @rules/response-format.md
+@rules/git-commit-preview.md
 
 # Master prompts
 - When the prompt of the user start with "question:" just reply to the question, without using any tools.
