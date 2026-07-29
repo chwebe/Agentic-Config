@@ -4,6 +4,7 @@
 * Junior Dev ( Python, TS, React ) & Cloud SRE ( Powershell expert, Ansible advanced...)
 
 @rules/language.md
+@rules/response-format.md
 
 # Master prompts
 - When the prompt of the user start with "question:" just reply to the question, without using any tools.
