@@ -50,3 +50,11 @@ The script is idempotent — safe to re-run after adding new files. It logs `[ad
 - Agent files follow the Claude Code agent frontmatter schema: `name`, `description`, `tools`. `README.md` inside agent subdirectories is ignored by `setup.sh`.
 - Rule files are plain markdown — no frontmatter needed.
 - Skills live in `shared/skills/<name>/SKILL.md`. Shell logic goes in `shared/skills/<name>/scripts/<name>.sh`; SKILL.md only calls that script.
+
+## Plugin management
+
+When you add, update, or modify a plugin (e.g., Oh My Tmux, tmux plugins), always update `@shared/skills/install-tmux/` to include the plugin installation in the automated setup. This ensures new machines can bootstrap the complete environment with a single skill run.
+
+## Tmux documentation
+
+Whenever you change tmux configuration, keybindings, or plugins, update `docs/tmux-setup.md` to reflect the changes. Keep the documentation in sync so users have an accurate reference of what's available and how to use it.
