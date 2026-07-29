@@ -103,16 +103,6 @@ install_tmux() {
     esac
 }
 
-install_oh_my_tmux() {
-    if [ -d ~/.tmux ]; then
-        echo "Oh My Tmux is already installed."
-    else
-        echo "Installing Oh My Tmux..."
-        git clone https://github.com/gpakosz/.tmux.git ~/.tmux
-        ln -s ~/.tmux/.tmux.conf ~/.tmux.conf
-        echo "Oh My Tmux symlink created at ~/.tmux.conf"
-    fi
-}
 
 install_tmux_plugins() {
     echo "Installing tmux plugins..."
@@ -192,7 +182,6 @@ main() {
         echo "tmux installed successfully: $(tmux -V)"
     fi
 
-    install_oh_my_tmux
     create_tmux_local_config
     install_tmux_plugins
 }

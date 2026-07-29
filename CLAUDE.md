@@ -53,7 +53,7 @@ The script is idempotent — safe to re-run after adding new files. It logs `[ad
 
 ## Plugin management
 
-When you add, update, or modify a plugin (e.g., Oh My Tmux, tmux plugins), always update `@shared/skills/install-tmux/` to include the plugin installation in the automated setup. This ensures new machines can bootstrap the complete environment with a single skill run.
+When you add, update, or modify a tmux plugin, always update `@shared/skills/install-tmux/` to include the plugin installation in the automated setup. This ensures new machines can bootstrap the complete environment with a single skill run.
 
 ## Tmux documentation
 

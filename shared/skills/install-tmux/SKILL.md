@@ -1,14 +1,14 @@
 ---
 name: install-tmux
-description: Install tmux, Oh My Tmux, and essential plugins (resurrect, continuum). Detects Linux distribution and uses the appropriate package manager. Supports Arch, Debian/Ubuntu, Fedora, RHEL/CentOS, openSUSE, Alpine, Void, Gentoo, and NixOS.
+description: Install tmux with essential plugins (resurrect, continuum) and optimized keybindings. Detects Linux distribution and uses the appropriate package manager. Supports Arch, Debian/Ubuntu, Fedora, RHEL/CentOS, openSUSE, Alpine, Void, Gentoo, and NixOS.
 ---
 
 # /install-tmux
 
-Installs tmux and sets up a complete terminal multiplexer environment:
-- **Oh My Tmux**: Configuration framework with clean UI and sensible defaults
+Installs tmux and sets up plugins and keybindings:
 - **tmux-resurrect**: Persist and restore tmux sessions
 - **tmux-continuum**: Automatic session backup and restoration
+- **Optimized keybindings**: Alt+h/v for splits, Alt+arrow for navigation, mouse support
 
 Usage: `/install-tmux`
 
@@ -26,8 +26,7 @@ Usage: `/install-tmux`
    **Exit 0 — success:**
    The script will:
    - Install tmux (if not already installed) and report its version
-   - Install Oh My Tmux into `~/.tmux` and create the `~/.tmux.conf` symlink
-   - Create `~/.tmux.conf.local` with plugin configuration
+   - Create `~/.tmux.conf.local` with plugin configuration and keybindings
    - Install TPM (Tmux Plugin Manager) and the following plugins:
      - **tmux-resurrect**: Save/restore tmux sessions
      - **tmux-continuum**: Auto-save sessions every 15 minutes and restore on startup

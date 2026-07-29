@@ -1,15 +1,11 @@
 # Tmux Setup Documentation
 
-A complete terminal multiplexer environment optimized for development and remote work with Claude Code and other agent tools.
+A terminal multiplexer environment optimized for development and remote work with Claude Code and other agent tools.
 
-## What Changed
+## What's Installed
 
-### Installed Components
-
-**Oh My Tmux**
-- Provides a clean, professional UI with sensible defaults
-- Replaces need for manual tmux configuration from scratch
-- Includes theme support and better status bar formatting
+**Core**
+- **tmux**: Terminal multiplexer for session management
 
 **Plugins**
 
@@ -113,9 +109,8 @@ tmux attach-session -t <session-name>
 
 ## Configuration Files
 
-- **`~/.tmux.conf`** → Symlink to Oh My Tmux main config (don't edit)
-- **`~/.tmux.conf.local`** → Your customizations (safe to edit)
-- **`~/.tmux/plugins/`** → Installed plugins
+- **`~/.tmux.conf.local`** → Your tmux configuration with keybindings and plugins
+- **`~/.tmux/plugins/`** → Installed plugins (tpm, resurrect, continuum)
 
 ## Useful Commands
 
