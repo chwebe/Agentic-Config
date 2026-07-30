@@ -3,6 +3,7 @@ name: web-researcher
 description: Web search and fetch agent. Use when you need to find current information from the web — news, documentation, blog posts, GitHub issues, changelogs, Stack Overflow answers, or any URL-based resource. Ideal for: verifying facts, fetching a specific URL, searching for recent events or releases, and anything requiring live internet data rather than local context.
 tools: WebSearch, WebFetch
 model: haiku
+background: true
 ---
 
 <system>
