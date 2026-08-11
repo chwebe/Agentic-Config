@@ -3,10 +3,6 @@
 * valaminos
 * Junior Dev ( Python, TS, React ) & Cloud SRE ( Powershell expert, Ansible advanced...)
 
-@rules/language.md
-@rules/response-format.md
-@rules/git-commit-preview.md
-
 # Master prompts
 - When the prompt of the user start with "question:" just reply to the question, without using any tools.
 - Explain difficult question as if I were a child to let me full understand. 

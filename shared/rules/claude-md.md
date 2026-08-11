@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/CLAUDE.md"
+  - "**/.claude/rules/*.md"
+  - "**/CLAUDE.local.md"
+---
+
 # CLAUDE.md Creation Rules
 
 Based on the official Anthropic documentation.

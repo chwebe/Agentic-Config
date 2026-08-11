@@ -38,22 +38,27 @@ All commits must follow the [Conventional Commits v1.0.0](https://www.convention
 - Add a body when the one-line description does not fully explain the *why*: a non-obvious motivation, a workaround for an external bug, a compliance or architectural constraint, or a breaking change that needs context.
 - Skip the body when the title is self-explanatory or the diff speaks for itself.
 
-## Examples
-
-```
-feat(lang): add Polish language
-
-fix: prevent racing of requests
-
-feat!: drop support for Node 6
-
-docs: correct spelling in CHANGELOG
-
-refactor(api): rename user endpoint to account
-
-fix(auth): handle expired tokens correctly
-```
-
 ## Co-authorship
 
 Never add Claude (or any Anthropic AI model) as a `Co-Authored-By` trailer in commits.
+
+## Commit Preview
+
+Before executing any commit, always show a preview using the format below. Do not run the commit until after displaying it.
+
+```
+╔══ COMMIT PREVIEW ════════════════════════════════════════╗
+║                                                          ║
+║  <type(scope): description>                              ║
+║                                                          ║
+║  Changes                                                 ║
+║  ├─ [M] <modified file>                                  ║
+║  ├─ [A] <added file>                                     ║
+║  └─ [D] <deleted file>                                   ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+Legend: `[M]` modified · `[A]` added · `[D]` deleted
+
+Then proceed with the commit immediately after — no need to ask for confirmation unless something looks wrong.

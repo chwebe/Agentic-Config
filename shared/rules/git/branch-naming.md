@@ -51,25 +51,3 @@ test/add-checkout-integration-tests
 chore/upgrade-node-18
 ci/add-coverage-report
 ```
-
-## What to avoid
-
-```
-# Bad — no type prefix
-add-login
-
-# Bad — uppercase
-Feature/AddLogin
-
-# Bad — spaces
-feature/add user login
-
-# Bad — underscores
-feature/add_user_login
-
-# Bad — too vague
-feature/changes
-
-# Bad — special characters
-feature/fix-issue#123
-```

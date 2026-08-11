@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/CLAUDE.md"
+  - "**/.claude/rules/*.md"
+  - "**/CLAUDE.local.md"
+---
+
 # CLAUDE.md Anti-patterns
 
 Failing CLAUDE.md files share recognisable patterns. Avoid them.
