@@ -4,15 +4,31 @@ Based on the official Anthropic documentation.
 
 ## File locations and scope
 
-Claude loads CLAUDE.md files in this order (broadest → most specific):
+Claude loads CLAUDE.md files in this order (broadest → most specific), **concatenating** all levels:
 
-| Location | Scope |
-|---|---|
-| `~/.claude/CLAUDE.md` | Global — all projects, personal preferences |
-| `./CLAUDE.md` or `./.claude/CLAUDE.md` | Project — shared with the team via git |
-| `./CLAUDE.local.md` | Local — personal overrides, git-ignored |
+| Level | Location | Scope |
+|---|---|---|
+| Managed policy | `/etc/claude-code/CLAUDE.md` (Linux/WSL) | Org-wide, cannot be excluded |
+| User | `~/.claude/CLAUDE.md` | Global — all projects, personal preferences |
+| Project | `./CLAUDE.md` or `./.claude/CLAUDE.md` | Project — shared with the team via git |
+| Local | `./CLAUDE.local.md` | Personal overrides, git-ignored |
 
-Files above the working directory are loaded fully at launch. Files in subdirectories load on demand when Claude reads files in those directories.
+All levels are **concatenated** top-to-bottom — there is no true override. The lowest file wins because it appears last in context.
+
+Files above the working directory load fully at session start. Files in subdirectories load on demand when Claude reads files in those directories.
+
+## Recommended structure
+
+Use this 6-section skeleton as a starting point:
+
+- **Stack** — technologies and versions in use
+- **Role** — one paragraph describing what the project does
+- **Key directories** — annotated tree of important folders
+- **Useful commands** — lint, test, local server, help flags
+- **Conventions** — rules to follow (preferences)
+- **Guardrails** — things Claude must NOT do without explicit approval
+
+**Conventions vs guardrails**: conventions are preferences ("use named exports"); guardrails are hard prohibitions ("never drop a database table without explicit confirmation"). Force yourself to separate them — mixing the two weakens both.
 
 ## What to put in CLAUDE.md
 
@@ -29,23 +45,15 @@ Include only what Claude **cannot infer from the code itself**:
 - Things already enforced by config files (ESLint, Prettier, tsconfig…)
 - Step-by-step tutorials or verbose documentation
 - Information that changes frequently (keep it stable)
+- What the code already says (endpoint lists, function signatures)
 
 ## Structure and format
 
-- Keep it under ~200 lines — treat it as a cheat sheet, not full documentation
+- **Ideal**: 60–120 lines — **Max**: 200 lines
 - Use short bullet points, not prose paragraphs
 - Group rules by topic with `#` headings
 - Prefer actionable rules ("Use ES modules" not "We like ES modules")
-
-```markdown
-# Code style
-- Use ES modules (import/export), not CommonJS (require)
-- Destructure imports when possible
-
-# Workflow
-- Typecheck after every series of changes
-- Run single tests, not the full suite, for performance
-```
+- Block-level HTML comments (`<!-- note -->`) are stripped from context at load time — use them for maintainer notes that should not consume tokens
 
 ## Modular organisation with imports
 
@@ -79,7 +87,7 @@ project/
 
 ## Path-scoped rules
 
-For rules that only apply to specific file types or subdirectories, place a CLAUDE.md directly in that subdirectory instead of polluting the root file.
+**Subdirectory CLAUDE.md** — place a CLAUDE.md directly in a subdirectory to scope rules to that folder:
 
 ```
 src/
@@ -89,6 +97,35 @@ src/
     └── CLAUDE.md    # rules only for frontend files
 ```
 
-## Initialisation
+**`.claude/rules/` with path frontmatter** — conditional loading by file glob. Rules only load when Claude works with matching files:
 
-Run `/init` once per new repository — Claude reads the project structure and writes an initial CLAUDE.md automatically. Review and trim it before committing.
+```markdown
+---
+paths:
+  - "src/api/**/*.ts"
+  - "tests/**/*.test.ts"
+---
+# API rules
+- Validate all inputs at the endpoint boundary
+- Use the standard error response format
+```
+
+Rules without a `paths:` frontmatter load unconditionally. Prefer this approach for large projects to reduce context consumption.
+
+## How to build a CLAUDE.md in 5 steps
+
+1. **Audit** — stack, versions, dependencies, runtime prerequisites
+2. **Config map** — first-level directory tree with one-line descriptions per folder
+3. **Conventions** — existing patterns, file naming, error handling, imports — written as short rules
+4. **Agent sections** — if using multiple agents, add focused sections per agent (QA → test zones; DevOps → pipelines)
+5. **Assemble** — write the 6-section structure; extract heavy sections via `@path` imports
+
+## Useful commands
+
+- `/init` — generate a starter CLAUDE.md from the current codebase
+- `/context` — see which CLAUDE.md and rule files loaded in the current session
+- `/memory` — browse and edit all CLAUDE.md files live
+
+## Anti-patterns
+
+@rules/claude-md-antipatterns.md
