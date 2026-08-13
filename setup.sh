@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/shared"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$ROOT_DIR/shared"
 CLAUDE_DIR="$HOME/.claude"
+ZSHRC="$HOME/.zshrc"
 
 link() {
   local src="$1" dest="$2"
@@ -81,5 +83,27 @@ for skill_dir in "$REPO_DIR/skills"/*/; do
 done
 cleanup_stale "$CLAUDE_DIR/skills" "$REPO_DIR/skills"
 cleanup_stale "$CLAUDE_DIR/commands" "$REPO_DIR/skills"
+
+echo "==> aliases"
+add_alias() {
+  local name="$1"
+  local cmd="$2"
+  local line="alias $name=\"$cmd\""
+  if [ ! -f "$ZSHRC" ]; then
+    echo "  [skip]    $name  — $ZSHRC not found"
+    return
+  fi
+  if grep -qF "$line" "$ZSHRC"; then
+    return
+  fi
+  if grep -q "^alias $name=" "$ZSHRC"; then
+    sed -i "s|^alias $name=.*|$line|" "$ZSHRC"
+    echo "  [updated] $name"
+    return
+  fi
+  printf '%s\n' "$line" >> "$ZSHRC"
+  echo "  [added]   $name"
+}
+add_alias "sync-main" "$ROOT_DIR/bin/checkout-main.sh"
 
 echo "done."
