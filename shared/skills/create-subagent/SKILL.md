@@ -26,6 +26,24 @@ If the answer to Q1 is ambiguous or too short, make a **second call** with at mo
 
 Never ask the user about model, tools, background, maxTurns, effort, permissionMode, memory, or any other technical field — derive them from context using the decision rules below.
 
+### Phase 1 gate
+
+Once you have enough information, display this box before moving on:
+
+```
+╔══ PHASE 1 COMPLETE ══════════════════════════════════════╗
+║  Purpose   → <one-line summary of what the agent does>   ║
+║  Scope     → <global | this project>                     ║
+║  Refusals  → <what it should NOT do, or "none stated">   ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+Then use `AskUserQuestion` with a single question:
+
+- Q `Gate` — single-select: `Continue to parameters`, `Adjust — I want to change something`
+
+If the user selects Adjust, re-open Q1 with a targeted follow-up. Do not proceed to Phase 2 until the user confirms.
+
 ---
 
 ## Phase 2 — Infer parameters and summarise
@@ -66,7 +84,24 @@ Before showing the file preview, present a summary table explaining every non-de
 
 Only include fields that differ from defaults. Then show the full file preview in a fenced markdown block.
 
-Ask the user to confirm or request changes before writing.
+### Phase 2 gate
+
+After the summary table and file preview, display this box:
+
+```
+╔══ PHASE 2 COMPLETE ══════════════════════════════════════╗
+║  Name      → <name>.md                                   ║
+║  Model     → <model>   Background → <true|false>         ║
+║  Tools     → <comma-separated list or "all">             ║
+║  Path      → <resolved file path>                        ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+Then use `AskUserQuestion` with a single question:
+
+- Q `Gate` — single-select: `Write the file`, `Change a parameter`, `Start over`
+
+If the user selects Change, ask which field to adjust and loop back through the summary. If they select Start over, restart from Phase 1. Do not write until the user confirms Write.
 
 ### File preview format
 
@@ -81,6 +116,26 @@ Compose a high-quality **system prompt** from the user's description. It should:
 - List what the agent does in numbered steps or bullet points
 - Include an explicit refusal boundary if the user mentioned one
 - Be concise — no padding or boilerplate
+
+**If the agent has multiple steps**, each step must appear explicitly in the system prompt using this format so the agent's own execution is visible and traceable:
+
+```
+**Step 1 — <label>**
+<what to do>
+Display the result with:
+╔══ STEP 1 COMPLETE ══════════════════════════════╗
+║  <key output or confirmation>                   ║
+╚═════════════════════════════════════════════════╝
+
+**Step 2 — <label>**
+<what to do>
+Display the result with:
+╔══ STEP 2 COMPLETE ══════════════════════════════╗
+║  <key output or confirmation>                   ║
+╚═════════════════════════════════════════════════╝
+```
+
+Always complete all steps first, then return ALL step boxes compiled into your final message — the caller only receives your last response, so every box must appear there. End with: "All N steps completed."
 
 ---
 
