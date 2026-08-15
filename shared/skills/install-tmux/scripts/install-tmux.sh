@@ -132,6 +132,48 @@ install_tmux_plugins() {
     echo "Plugins installed successfully."
 }
 
+fix_zsh_tmux_alias() {
+    # oh-my-zsh's tmux plugin defines `alias tmux=_zsh_tmux_plugin_run`.
+    # Claude Code's shell snapshots (used to replay the user's shell env into
+    # Bash-tool shells) drop underscore-prefixed functions, so that alias
+    # dangles outside a real interactive terminal, breaking every `tmux`
+    # invocation Claude Code runs. Only applies to zsh + oh-my-zsh + tmux plugin.
+    [ -f ~/.zshrc ] || return 0
+    [ -d ~/.oh-my-zsh ] || return 0
+    grep -qE '^[[:space:]]*plugins=\(.*\btmux\b.*\)' ~/.zshrc || return 0
+
+    if grep -q 'functions\[tmux_run\]' ~/.zshrc; then
+        echo "zsh tmux alias fix already present in ~/.zshrc"
+        return 0
+    fi
+
+    echo "Patching ~/.zshrc: oh-my-zsh tmux plugin's alias breaks in non-interactive tool shells"
+    cat >> ~/.zshrc << 'EOF'
+
+# Claude Code's shell snapshots (used to replay your env into tool-call
+# shells) drop underscore-prefixed functions. Copy the oh-my-zsh tmux
+# plugin's wrapper to a non-underscore name so `tmux` keeps working there.
+if (( $+functions[_zsh_tmux_plugin_run] )); then
+  functions[tmux_run]="${functions[_zsh_tmux_plugin_run]}"
+  alias tmux=tmux_run
+fi
+EOF
+    echo "Patched ~/.zshrc"
+}
+
+verify_zsh_tmux_alias() {
+    # Confirms the patched alias resolves to a non-underscore function in a
+    # real interactive zsh, i.e. it will survive the shell-snapshot filter.
+    grep -q 'functions\[tmux_run\]' ~/.zshrc 2>/dev/null || return 0
+    command -v zsh &>/dev/null || return 0
+
+    if zsh -ic 'type tmux_run' &>/dev/null; then
+        echo "Verified: tmux alias now resolves to tmux_run (no leading underscore)."
+    else
+        echo "Warning: could not verify tmux_run in an interactive zsh — check ~/.zshrc manually." >&2
+    fi
+}
+
 create_tmux_config() {
     if [ -f ~/.tmux.conf ]; then
         return 0
@@ -196,6 +238,8 @@ main() {
 
     create_tmux_config
     install_tmux_plugins
+    fix_zsh_tmux_alias
+    verify_zsh_tmux_alias
 }
 
 main "$@"
