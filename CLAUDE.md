@@ -45,10 +45,29 @@ It symlinks each file individually:
 
 The script is idempotent — safe to re-run after adding new files. It logs `[added]`, `[updated]`, or `[skip]` for each entry, and `[removed]` when a stale symlink pointing into `shared/` is cleaned up.
 
+## Topics
+
+Topic-dedicated rules and skills (e.g. Ansible) live in `topics/<name>/`, separate from `shared/`. They apply only to a specific technology, not to every Claude Code session, so they are deployed on demand rather than always symlinked into `~/.claude/`:
+
+```
+topics/
+└── <name>/                    # e.g. ansible
+    ├── rules/
+    │   └── *.md                # Path-scoped: frontmatter `paths:` glob, not @imported
+    └── skills/
+        └── <name>/SKILL.md
+```
+
+Deploy a topic into any destination with:
+```bash
+bash deploy-topic.sh <name> <destination-dir>
+```
+It verifies `topics/<name>` exists, then symlinks its `rules/` and `skills/` into `<destination-dir>`, the same way `setup.sh` does for `shared/`.
+
 ## Conventions
 
 - Agent files follow the Claude Code agent frontmatter schema: `name`, `description`, `tools`. `README.md` inside agent subdirectories is ignored by `setup.sh`.
-- Rule files are plain markdown — no frontmatter needed.
+- `shared/rules/*.md` files are plain markdown — no frontmatter needed. `topics/<name>/rules/*.md` files use `paths:` frontmatter to scope when they load.
 - Skills live in `shared/skills/<name>/SKILL.md`. Shell logic goes in `shared/skills/<name>/scripts/<name>.sh`; SKILL.md only calls that script.
 
 ## Plugin management
