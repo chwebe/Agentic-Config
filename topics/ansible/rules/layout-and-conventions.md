@@ -84,6 +84,7 @@ Ansible resolves variables from many sources with a strict precedence order — 
 - **Variables**: snake_case, prefixed with the owning role or component — `nginx_port`, `nginx_workers`, `pg_version`
 - **Roles**: snake_case — `nginx_lab`, `pg_backup`
 - **Playbooks**: action verb or target group, kebab-case — `deploy-webservers.yml`, `harden-baseline.yml`, `site.yml`
+- **Plays**: `name:` is mandatory and must describe the objective, not the literal command — `Deploy nginx`, not `Run dnf install nginx`
 - **Tasks**: capitalized, imperative, describe the action — `Install nginx package`, `Restart nginx service`
 - **Handlers**: mirror the task they respond to — `restart nginx`, `reload firewall`
 - **Tags**: short, descriptive, lowercase — `nginx`, `firewall`, `monitoring`
