@@ -60,9 +60,9 @@ topics/
 
 Deploy a topic into any destination with:
 ```bash
-bash deploy-topic.sh <name> <destination-dir>
+bash deploy-topic.sh <name> <destination-dir> <copy|symlink> [-f|--force]
 ```
-It verifies `topics/<name>` exists, then symlinks its `rules/` and `skills/` into `<destination-dir>`, the same way `setup.sh` does for `shared/`.
+It verifies `topics/<name>` exists, then either symlinks or copies its `rules/` and `skills/` into `<destination-dir>` depending on the mode given. Symlink mode mirrors `setup.sh`. Copy mode always overwrites existing files at the destination; it asks for a `y`/`yes` confirmation first unless `-f`/`--force` is passed.
 
 ## Conventions
 
